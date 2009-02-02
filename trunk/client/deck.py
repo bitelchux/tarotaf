@@ -6,103 +6,116 @@ from PySFML import sf
 import time
 import math
 
-#Creation of the main window
-window = sf.RenderWindow(sf.VideoMode(800, 600), "Tarotaf")
+class Deck:
 
-#Initial parameters
-init_x=40          #X-Position of the deck
-init_y=400        #Y-Position of the deck
-bounce=30      #Height for the "bounce" effect of the card
-uncover=25     #Uncover the left of the cards
-#Lists that contain cards files and cards sprites
-img = []
-card = []
-#Initial filling of the lists
-for i in range(20):
-	img.append(sf.Image())
-	img[i].LoadFromFile("img/"+str(i)+".png")
-	card.append(sf.Sprite(img[i]))
-	card[i].SetX(card[i].GetPosition()[0]+uncover*i+init_x)
-	card[i].SetY(init_y)
-	card[i].SetScale(0.5,0.5)	
-#Dimension of a card
-width = card[0].GetSize()[0]
-height = card[0].GetSize()[1]
-#Selected card (Dafault = last one)
-ind=len(card)-1
-
-start=True  #Boolean, True as long as the deck hasn't been visited
-click=False #Boolean to determine if a Drag'n'Drop is initiated
-
-# On dmarre la boucle de jeu
-running = True
-
-while running:
-	event = sf.Event()
-	while window.GetEvent(event):
-		if event.Type == sf.Event.Closed:
-			running = False
-			
-		#On a mouse click, determine...
-		if event.Type == sf.Event.MouseButtonPressed:
-			#...if the cursor is on a card of the deck...
-			if(event.MouseButton.Y>init_y and event.MouseButton.Y<init_y+height and event.MouseButton.X>init_x and event.MouseButton.X<init_x+uncover*(len(card)-1)+width):
-				click=True
-				init=True
-			#...or on the top of a bouncing card
-			if(event.MouseButton.Y<init_y and event.MouseButton.Y>init_y-30 and  event.MouseButton.X>init_x and event.MouseButton.X<init_x+uncover*(len(card)-1)+card[ind].GetSize()[0]):
-				click=True
-				init=True
-				
-		#On a mouse drop	
-		if event.Type == sf.Event.MouseButtonReleased:
-			if click:
-				card[ind].SetPosition(init_x+uncover*ind,init_y-30)							
-				click=False
-				init=False	
+	def __init__(self,window,event,player,table):
+		#Initial parameters
+		self.window = window
+		self.event = event
+		self.player=player   #Player 0
+		self.table=table      #Table associated to the room
+		self.init_x=20          #X-Position of the deck
+		self.init_y=window.GetHeight()-140       #Y-Position of the deck
+		self.bounce=30      #Height for the "bounce" effect of the card
+		self.uncover=25     #Uncover the left of the cards
+		#Lists that contain cards files and cards sprites
+		self.img = []
+		self.card = []
+		#Load cards image files
+		for i in range(51):
+			self.img.append(sf.Image())
+			self.img[i].LoadFromFile("img/"+str(i)+".png")
+		#Set the card in the hand
+		self.set_cards()
+		#Dimension of a card
+		self.width = self.card[0].GetSize()[0]
+		self.height = self.card[0].GetSize()[1]
+		#Selected card (Dafault = last one)
+		self.ind=len(self.card)-1
 		
-		#On a mouse gesture
-		if event.Type == sf.Event.MouseMoved:
-			
-			#Mouse is over the deck and the player isn't clicking
-			if(event.MouseMove.Y>init_y and event.MouseMove.Y<init_y+height and event.MouseMove.X>init_x and event.MouseMove.X<init_x+uncover*(len(card)-1)+width) and click==False:
-				#Not the last card
-				if int(math.floor((event.MouseMove.X-init_x)/uncover))<=(len(card)-1):
-					#Zoom out the previous card and unbounce it...
-					if int(math.floor((event.MouseMove.X-init_x)/uncover)) != ind and start==False:
-						card[ind].SetScale(0.5,0.5)
-						card[ind].SetY(card[ind].GetPosition()[1]+30)
-					ind = int(math.floor((event.MouseMove.X-init_x)/uncover))
-					start=False
-				else:
-					if int(math.floor((event.MouseMove.X-init_x)/uncover)) > ind and start==False:
-						card[ind].SetScale(0.5,0.5)
-						card[ind].SetY(card[ind].GetPosition()[1]+30)						
-					ind = len(card)-1
-					start=False
-				#Zoom on the card and make it bounce !...
-				card[ind].SetScale(0.6,0.6)
-				#...if not already
-				if card[ind].GetPosition()[1]==init_y:
-					card[ind].SetY(card[ind].GetPosition()[1]-30)
-			
-			#If the card is dragged
-			if click:
-				#It's necessary to store the position of the cursor, here its distance with the card position
-				if init:
-					dx = init_x+uncover*ind - event.MouseMove.X
-					dy = (init_y+height-card[ind].GetSize()[1]) - 30 - event.MouseMove.Y
-					init=False		
-				#New position of the card
-				card[ind].SetPosition(dx+event.MouseMove.X,dy+event.MouseMove.Y)	
 
+		self.start=True  #Boolean, True as long as the deck hasn't been visited
+		self.click=False #Boolean to determine if a Drag'n'Drop is initiated
+		self.init=False
+			
+	def on_click(self):
+		#...if the cursor is on a card of the deck...
+		if(self.event.MouseButton.Y>self.init_y and self.event.MouseButton.Y<self.init_y+self.height and self.event.MouseButton.X>self.init_x and self.event.MouseButton.X<self.init_x+self.uncover*(len(self.card)-1)+self.width):
+			self.click=True
+			self.init=True
+			
+		#...or on the top of a bouncing card
+		if(self.event.MouseButton.Y<self.init_y and self.event.MouseButton.Y>self.init_y-30 and  self.event.MouseButton.X>self.init_x and self.event.MouseButton.X<self.init_x+self.uncover*(len(self.card)-1)+self.card[self.ind].GetSize()[0]):
+			self.click=True
+			self.init=True
+			
+	
+	def on_drop(self):		
+		if self.click:
+			if self.table.on_drop():
+				print "IN !"
+			else:
+				print "out ... :("
+			#Apply the transparency if not on the drop zone
+			color = self.card[self.ind].GetColor()			
+			color.a=255
+			self.card[self.ind].SetColor(color)
+			self.card[self.ind].SetPosition(self.init_x+self.uncover*self.ind,self.init_y-30)							
+			self.click=False
+			self.init=False	
 
-	#Screen painting
-	window.Clear(sf.Color(0,128,0))
-	
-	#Cards drawing
-	for i in range(20):
-		window.Draw(card[i])
-	
-	#Display the main window	
-	window.Display()
+	def on_move(self):
+		#Mouse is over the deck and the player isn't clicking
+		if(self.event.MouseMove.Y>self.init_y and self.event.MouseMove.Y<self.init_y+self.height and self.event.MouseMove.X>self.init_x and self.event.MouseMove.X<self.init_x+self.uncover*(len(self.card)-1)+self.width) and self.click==False:
+			#Not the last card
+			if int(math.floor((self.event.MouseMove.X-self.init_x)/self.uncover))<=(len(self.card)-1):
+				#Zoom out the previous card and unbounce it...
+				if int(math.floor((self.event.MouseMove.X-self.init_x)/self.uncover)) != self.ind and self.start==False:
+					self.card[self.ind].SetScale(0.5,0.5)
+					self.card[self.ind].SetY(self.card[self.ind].GetPosition()[1]+30)
+				self.ind = int(math.floor((self.event.MouseMove.X-self.init_x)/self.uncover))
+				self.start=False
+			else:
+				if int(math.floor((self.event.MouseMove.X-self.init_x)/self.uncover)) > self.ind and self.start==False:
+					self.card[self.ind].SetScale(0.5,0.5)
+					self.card[self.ind].SetY(self.card[self.ind].GetPosition()[1]+30)						
+				self.ind = len(self.card)-1
+				self.start=False
+			#Zoom on the card and make it bounce !...
+			self.card[self.ind].SetScale(0.6,0.6)
+			#...if not already
+			if self.card[self.ind].GetPosition()[1]==self.init_y:
+				self.card[self.ind].SetY(self.card[self.ind].GetPosition()[1]-30)
+
+		#If the card is dragged
+		if self.click:
+			#It's necessary to store the position of the cursor, here its distance with the card position
+			if self.init:				
+				self.dx = self.init_x+self.uncover*self.ind - self.event.MouseMove.X
+				self.dy = (self.init_y+self.height-self.card[self.ind].GetSize()[1]) - 30 - self.event.MouseMove.Y
+				self.init=False		
+			#New position of the card			
+			self.card[self.ind].SetPosition(self.dx+self.event.MouseMove.X,self.dy+self.event.MouseMove.Y)
+			#Store the position of the mouse for the drop
+			self.mouse_x=self.event.MouseMove.X
+			self.mouse_Y=self.event.MouseMove.Y
+			#Apply the transparency if not on the drop zone
+			color = self.card[self.ind].GetColor()
+			if self.table.on_drop():
+				color.a=255
+				self.card[self.ind].SetColor(color)
+			else:				
+				color.a=50
+				self.card[self.ind].SetColor(color)
+
+	def display(self):	
+		#Cards drawing
+		for i in range(20):
+			self.window.Draw(self.card[i])
+	#set_card : store the sprites of the card that compose the deck
+	def set_cards(self):
+		for card in self.player.hand:
+			self.card.append(sf.Sprite(self.img[card]))
+			self.card[card].SetX(self.card[card].GetPosition()[0]+self.uncover*card+self.init_x)
+			self.card[card].SetY(self.init_y)
+			self.card[card].SetScale(0.5,0.5)
