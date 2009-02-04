@@ -23,8 +23,11 @@ from player import Player
 from menu import Menu
 from room import Room
 
+#Config file
+mode=sf.VideoMode(1024,768)
+
 #Creation of the main window
-window = sf.RenderWindow(sf.VideoMode(1000,700), "Tarotaf",sf.Style.Close)
+window = sf.RenderWindow(mode, "Tarotaf",sf.Style.Close)
 window.SetFramerateLimit(25)
 
 #Init
@@ -38,7 +41,7 @@ rooms[0].add_player(Player(0,'Elie',table))
 rooms[0].add_player(Player(1,'JM',table))
 rooms[0].add_player(Player(2,'Toto',table))
 rooms[0].add_player(Player(3,'Fifou',table))
-for i in range(25):
+for i in range(23):
 	rooms[0].players[0].add_card(i)
 rooms[0].players[1].add_card(42)
 rooms[0].players[2].add_card(19)
@@ -46,6 +49,7 @@ rooms[0].players[3].add_card(28)
 table.add_box();table.add_box();table.add_box();table.add_box();
 deck = Deck(window,event,rooms[0].players[0],table)
 menu=Menu(window,event)
+fullscreen=False
 
 
 
@@ -75,11 +79,27 @@ while running:
 			deck.on_move()
 			menu.on_move()
 			
+		if event.Type == sf.Event.KeyPressed:			
+			if event.Key.Code==sf.Key.Escape:
+				running=False
+				window.Create(mode, "Tarotaf",sf.Style.Close)	
+				window.Show(False)				
+			if event.Key.Code==sf.Key.F11 and  fullscreen:				 
+				window.Create(mode, "Tarotaf",sf.Style.Close)	
+				table.load_theme()	
+				deck.set_cards()				
+			if event.Key.Code==sf.Key.F11 and not fullscreen:
+				window.Create(mode, "Tarotaf",sf.Style.Fullscreen)
+				deck.set_cards()
+				table.load_theme()					
+			if event.Key.Code==sf.Key.F11:
+				fullscreen= not fullscreen
+				
 	#Screen painting
-	window.Clear(sf.Color(0,128,0))
+	window.Clear(sf.Color(24,100,0))
 	
-	#Display everything
-	window.Draw(table.back)
+	#Display everything	
+	window.Draw(table.background)
 	table.display_card()
 	table.display_players()
 	menu.display()

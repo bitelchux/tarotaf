@@ -6,6 +6,7 @@ from PySFML import sf
 import time
 import math
 import random
+from configobj import ConfigObj
 
 
 class Table:
@@ -16,10 +17,11 @@ class Table:
 		self.event=event
 		self.init_x=5               #x margin
 		self.init_y=5               #y margin
-		self.width=1000          
-		self.height=525          
-		self.box_width=100     
-		self.box_height=40
+		self.width=self.window.GetWidth()          
+		self.height=self.window.GetHeight()*0.85
+		self.box_height=self.window.GetHeight()*0.13
+		self.box_width=self.box_height*1.62                  #Perfect box :)  
+		print self.box_width		
 		self.drop_width=300
 		self.drop_height=200
 		self.nb_players=0        #Nb of actual players on the table			
@@ -32,18 +34,18 @@ class Table:
 		#Mouse position
 		self.mouse_x=0
 		self.mouse_y=0
-		
-		img = sf.Image()
-		img.LoadFromFile("img/back.png")
-		self.back = sf.Sprite(img)
-		
+		#"Themable" vars
+		self.box_color=[]
+		self.box_border_thickness=0
+		self.box_border_color=[]
+		self.load_theme()
+				
 		
 		
 	#display_* : display the items (sprites, strings...) on the window	
 	def display_card(self):
 		for card in self.cards:
-			self.window.Draw(card)
-		
+			self.window.Draw(card)		
 	def display_players(self):
 		for box in self.boxes:
 			self.window.Draw(box)
@@ -78,8 +80,8 @@ class Table:
 			x=self.width-self.init_x-self.box_width
 			y=self.init_y+int(self.height/2)-int(self.box_height/2)
 			
-		#Background
-		self.boxes.append(sf.Shape.Rectangle(x,y,x+self.box_width,y+self.box_height,sf.Color(0,0,0,45)))
+		#Background		
+		self.boxes.append(sf.Shape.Rectangle(x,y,x+self.box_width,y+self.box_height,sf.Color(self.box_color[0],self.box_color[1],self.box_color[2],self.box_color[3]),self.box_border_thickness,sf.Color(self.box_border_color[0],self.box_border_color[1],self.box_border_color[2],self.box_border_color[3])))
 		#Name
 		self.names.append(sf.String(self.room.players[id].name))
 		self.names[id].SetPosition(x+1,y+1)
@@ -90,7 +92,7 @@ class Table:
 	
 	#add_card : create the card to be displayed   ====> To be modified
 	def add_card(self,player):
-		
+		#To be changed to adapt the size of the screen
 		img = sf.Image()
 		img.LoadFromFile("img/"+str(self.room.players[player].hand[0])+".png")
 		self.cards[player] = sf.Sprite(img)
@@ -99,31 +101,31 @@ class Table:
 		#Player 0
 		if player ==0:
 			#Position
-			x=self.init_x+int(self.width/2)-int(self.box_width/2)
-			y=self.height-2*self.init_y-self.box_height-self.box_height-self.cards[player].GetSize()[1]			
+			x=self.init_x+int(self.width/2)-int(self.cards[player].GetSize()[0]/2)
+			y=self.height-self.init_y-self.box_height-self.box_height-random.randint(30,40)			
 			
 		#Player 1 
 		elif player ==1:
 			#Position
-			x=2*self.init_x+self.box_width+random.randint(25,50)
-			y=self.init_y+int(self.height/2)-int(self.box_height/2)			
+			x=self.init_x+self.box_width+random.randint(30,40)
+			y=self.init_y+int(self.height/2)-int(self.cards[player].GetSize()[1]/2)			
 			
 		#Player 2
 		elif player ==2:
 			#Position
-			x=self.init_x+int(self.width/2)-int(self.box_width/2)
-			y=2*self.init_y+self.box_height+random.randint(25,50)	
+			x=self.init_x+int(self.width/2)-int(self.cards[player].GetSize()[0]/2)
+			y=self.init_y+self.box_height+random.randint(30,40)	
 			
 		#Player 3 
 		elif player ==3:
 			#Position
-			x=self.width-2*self.init_x-self.box_width-self.cards[player].GetSize()[0]-random.randint(25,50)
-			y=self.init_y+int(self.height/2)-int(self.box_height/2)	
+			x=self.width-self.init_x-self.box_width-self.cards[player].GetSize()[0]-random.randint(30,40)
+			y=self.init_y+int(self.height/2)-int(self.cards[player].GetSize()[1]/2)	
 		
 		
 		#self.cards[player].SetPosition(2*self.init_x+self.box_width,self.init_y+int(self.height/2)-int(self.cards[player].GetSize()[1]/2))
 		self.cards[player].SetPosition(x,y)		
-		#self.cards[player].Rotate(random.randint(-12,12))
+		self.cards[player].Rotate(random.randint(-12,12))
 		
 	#on_drop : print the drop zone and tell if it's in or out
 	def on_drop(self):
@@ -131,3 +133,30 @@ class Table:
 			return True
 		else:
 			return False
+	#load_theme : load the theme from the conf file and apply it to the table		
+	def load_theme(self):
+		config = ConfigObj("./themes/default/theme.conf") #Load the config file
+		background = sf.Image()
+		background.LoadFromFile("./themes/default/background.png")		
+		self.background = sf.Sprite(background)
+		self.background.Resize(self.window.GetWidth(),self.window.GetHeight())		
+		#Color of the players' boxes
+		for color in config['box_color']:
+			self.box_color.append(int(color))
+		if len(self.box_color)==3:
+			self.box_color.append(255) #If transparency is not specified
+		#Color of the players' boxes border		
+		for color in config['box_border_color']:
+			self.box_border_color.append(int(color))
+		if len(self.box_border_color)==3:
+			self.box_border_color.append(255) #If transparency is not specified
+		#Thickness of the border
+		self.box_border_thickness=int(config['box_border_thickness'])
+		
+		#Size of the table based on the size of the window
+		self.width=self.window.GetWidth()
+		self.height=int(0.85*self.window.GetHeight())
+			
+			
+			
+			

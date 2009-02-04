@@ -13,7 +13,7 @@ class Menu:
 		self.visible=False
 		self.background_color=sf.Color(0,0,0,240)
 		self.width=250
-		self.width_hidden=10
+		self.width_hidden=0
 		self.height=self.window.GetHeight()
 		self.background = sf.Shape.Rectangle(self.window.GetWidth()-self.width_hidden, 0, self.window.GetWidth(), self.height, self.background_color)
 		
