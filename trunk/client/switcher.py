@@ -14,8 +14,8 @@ class Switcher:
 		self.thumbs2=thumbs		
 		self.init_x=self.window.GetWidth()*0.65
 		self.init_y=self.window.GetHeight()*0.86
-		self.width=300
-		self.height=100		
+		self.width=self.window.GetWidth()*0.3
+		self.height=self.window.GetHeight()*0.13	
 		self.nb_rooms=0
 		self.thumbs=[]
 		self.visible=False
