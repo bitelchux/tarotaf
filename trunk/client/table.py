@@ -21,7 +21,6 @@ class Table:
 		self.height=self.window.GetHeight()*0.85
 		self.box_height=self.window.GetHeight()*0.13
 		self.box_width=self.box_height*1.62                  #Perfect box :)  
-		print self.box_width		
 		self.drop_width=300
 		self.drop_height=200
 		self.nb_players=0        #Nb of actual players on the table			
@@ -86,7 +85,7 @@ class Table:
 		self.names.append(sf.String(self.room.players[id].name))
 		self.names[id].SetPosition(x+1,y+1)
 		self.names[id].SetSize(20)
-		self.names[id].Rotate(9)		
+		#self.names[id].Rotate(3)		
 		
 		self.nb_players = self.nb_players + 1
 	
@@ -125,7 +124,7 @@ class Table:
 		
 		#self.cards[player].SetPosition(2*self.init_x+self.box_width,self.init_y+int(self.height/2)-int(self.cards[player].GetSize()[1]/2))
 		self.cards[player].SetPosition(x,y)		
-		self.cards[player].Rotate(random.randint(-12,12))
+		#self.cards[player].Rotate(random.randint(-12,12))
 		
 	#on_drop : print the drop zone and tell if it's in or out
 	def on_drop(self):
