@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="700"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="back.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/elie/tarotaf/client/themes/default/background.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.75714286"
+     inkscape:cx="466.06596"
+     inkscape:cy="378.9957"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1278"
+     inkscape:window-height="755"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#9c9455;fill-opacity:1"
+       id="rect5293"
+       width="1024"
+       height="768"
+       x="0"
+       y="-68" />
+    <rect
+       style="opacity:0.51863355;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:4.84007597;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:14.52022752, 4.84007585;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect5282"
+       width="605.15991"
+       height="113.15993"
+       x="2.420038"
+       y="584.42004" />
+    <path
+       transform="matrix(0.9264503,0,0,1.0238095,57.427552,-143.25155)"
+       d="M 859.81131,390.94339 A 369.15094,210 0 1 1 121.50943,390.94339 A 369.15094,210 0 1 1 859.81131,390.94339 z"
+       sodipodi:ry="210"
+       sodipodi:rx="369.15094"
+       sodipodi:cy="390.94339"
+       sodipodi:cx="490.66037"
+       id="path5288"
+       style="fill:#502d16;fill-opacity:1"
+       sodipodi:type="arc" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#176400;fill-opacity:1"
+       id="path3774"
+       sodipodi:cx="490.66037"
+       sodipodi:cy="390.94339"
+       sodipodi:rx="369.15094"
+       sodipodi:ry="210"
+       d="M 859.81131,390.94339 A 369.15094,210 0 1 1 121.50943,390.94339 A 369.15094,210 0 1 1 859.81131,390.94339 z"
+       transform="matrix(0.8722719,0,0,0.952381,84.010739,-115.32707)" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2384"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#175b00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       transform="matrix(1.3774549,0,0,1.7405099,-146.62119,-205.99759)"><flowRegion
+         id="flowRegion2386"><rect
+           id="rect2388"
+           width="265.47171"
+           height="112.26415"
+           x="383.01886"
+           y="235.09435"
+           style="fill:#175b00;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara2390"
+         style="font-size:60px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#175b00;fill-opacity:1;font-family:Calibri;-inkscape-font-specification:Calibri Bold Italic">Tarotaf</flowPara></flowRoot>  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2" />
+</svg>
